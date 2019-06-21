@@ -131,7 +131,7 @@ define inline_script stop_recording
 define inline_script tobiictrl
 	set description "Executes Python code"
 	___run__
-	from tobiiglassesctrl.controller import TobiiGlassesController
+	from tobiiglassesctrl import TobiiGlassesController
 	
 	tobiiglasses = TobiiGlassesController()
 	

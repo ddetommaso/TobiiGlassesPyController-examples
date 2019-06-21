@@ -23,9 +23,9 @@ if hasattr(__builtins__, 'raw_input'):
 
 from tobiiglassesctrl import TobiiGlassesController
 
-address = "192.168.71.50"
-#address = "fe80::76fe:48ff:ff00:ff00"
-tobiiglasses = TobiiGlassesController(address, video_scene=True)
+ipv4_address = "192.168.71.50"
+
+tobiiglasses = TobiiGlassesController(ipv4_address, video_scene=True)
 
 project_id = tobiiglasses.create_project("Test live_scene_and_gaze.py")
 

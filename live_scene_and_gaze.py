@@ -21,7 +21,7 @@ import numpy as np
 if hasattr(__builtins__, 'raw_input'):
       input=raw_input
 
-from tobiiglassesctrl.controller import TobiiGlassesController
+from tobiiglassesctrl import TobiiGlassesController
 
 address = "192.168.71.50"
 #address = "fe80::76fe:48ff:ff00:ff00"

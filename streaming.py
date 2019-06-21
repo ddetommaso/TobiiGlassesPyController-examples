@@ -17,7 +17,7 @@
 
 import time
 import json
-from tobiiglassesctrl.controller import TobiiGlassesController
+from tobiiglassesctrl import TobiiGlassesController
 
 
 def main():

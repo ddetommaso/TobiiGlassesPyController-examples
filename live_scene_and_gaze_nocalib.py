@@ -26,24 +26,6 @@ from tobiiglassesctrl import TobiiGlassesController
 ipv4_address = "192.168.71.50"
 
 tobiiglasses = TobiiGlassesController(ipv4_address, video_scene=True)
-
-project_id = tobiiglasses.create_project("Test live_scene_and_gaze.py")
-
-participant_id = tobiiglasses.create_participant(project_id, "participant_test")
-
-calibration_id = tobiiglasses.create_calibration(project_id, participant_id)
-
-input("Put the calibration marker in front of the user, then press enter to calibrate")
-tobiiglasses.start_calibration(calibration_id)
-
-res = tobiiglasses.wait_until_calibration_is_done(calibration_id)
-
-
-if res is False:
-	print("Calibration failed!")
-	exit(1)
-
-
 tobiiglasses.start_streaming()
 video_freq = tobiiglasses.get_video_freq()
 
@@ -66,9 +48,10 @@ while(cap.isOpened()):
     height, width = frame.shape[:2]
     data_gp  = tobiiglasses.get_data()['gp']
     data_pts = tobiiglasses.get_data()['pts']
+    print(data_gp, data_pts)
     offset = data_gp['ts']/1000000.0 - data_pts['ts']/1000000.0
     if offset > 0.0 and offset <= frame_duration:
-        cv2.circle(frame,(int(data_gp['gp'][0]*width),int(data_gp['gp'][1]*height)), 60, (0,0,255), 5)
+        cv2.circle(frame,(int(data_gp['gp'][0]*width),int(data_gp['gp'][1]*height)), 60, (0,0,255), 6)
     # Display the resulting frame
     cv2.imshow('Tobii Pro Glasses 2 - Live Scene',frame)
 
@@ -85,6 +68,5 @@ cap.release()
 
 # Closes all the frames
 cv2.destroyAllWindows()
-
 tobiiglasses.stop_streaming()
 tobiiglasses.close()

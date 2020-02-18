@@ -19,10 +19,12 @@ from tobiiglassesctrl import TobiiGlassesController
 
 def main():
 
-	TobiiGlassesController()
-
 	"""
-	other ways to connect with the tobii glasses
+	How to connect with the tobii glasses
+
+	0. Automatic discovery of the device
+
+	TobiiGlassesController()
 
 	1. If you know the IPv6 addr of the tobii glasses
 
@@ -36,8 +38,10 @@ def main():
 	3. If you know the IPv4 addr of the tobii glasses (WLAN or LAN connections)
 
 	TobiiGlassesController("192.168.71.50")
-
 	"""
+
+	TobiiGlassesController()
+
 
 if __name__ == '__main__':
     main()

@@ -44,13 +44,6 @@ if res is False:
 	exit(1)
 
 
-tobiiglasses.start_streaming()
-video_freq = tobiiglasses.get_video_freq()
-
-frame_duration = 1000.0/float(video_freq) #frame duration in ms
-
-input("Press ENTER to start the video scene")
-
 cap = cv2.VideoCapture("rtsp://%s:8554/live/scene" % ipv4_address)
 
 # Check if camera opened successfully
@@ -58,17 +51,16 @@ if (cap.isOpened()== False):
   print("Error opening video stream or file")
 
 # Read until video is completed
+tobiiglasses.start_streaming()
 while(cap.isOpened()):
   # Capture frame-by-frame
   ret, frame = cap.read()
   if ret == True:
-
     height, width = frame.shape[:2]
     data_gp  = tobiiglasses.get_data()['gp']
-    data_pts = tobiiglasses.get_data()['pts']
-    offset = data_gp['ts']/1000000.0 - data_pts['ts']/1000000.0
-    if offset > 0.0 and offset <= frame_duration:
+    if data_gp['ts'] > 0:
         cv2.circle(frame,(int(data_gp['gp'][0]*width),int(data_gp['gp'][1]*height)), 60, (0,0,255), 5)
+
     # Display the resulting frame
     cv2.imshow('Tobii Pro Glasses 2 - Live Scene',frame)
 

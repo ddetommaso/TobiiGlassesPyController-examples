@@ -17,21 +17,11 @@
 
 import cv2
 import numpy as np
-
-if hasattr(__builtins__, 'raw_input'):
-      input=raw_input
-
 from tobiiglassesctrl import TobiiGlassesController
 
 ipv4_address = "192.168.71.50"
 
 tobiiglasses = TobiiGlassesController(ipv4_address, video_scene=True)
-tobiiglasses.start_streaming()
-video_freq = tobiiglasses.get_video_freq()
-
-frame_duration = 1000.0/float(video_freq) #frame duration in ms
-
-input("Press ENTER to start the video scene")
 
 cap = cv2.VideoCapture("rtsp://%s:8554/live/scene" % ipv4_address)
 
@@ -39,18 +29,15 @@ cap = cv2.VideoCapture("rtsp://%s:8554/live/scene" % ipv4_address)
 if (cap.isOpened()== False):
   print("Error opening video stream or file")
 
+tobiiglasses.start_streaming()
 # Read until video is completed
 while(cap.isOpened()):
   # Capture frame-by-frame
   ret, frame = cap.read()
   if ret == True:
-
     height, width = frame.shape[:2]
     data_gp  = tobiiglasses.get_data()['gp']
-    data_pts = tobiiglasses.get_data()['pts']
-    print(data_gp, data_pts)
-    offset = data_gp['ts']/1000000.0 - data_pts['ts']/1000000.0
-    if offset > 0.0 and offset <= frame_duration:
+    if data_gp['ts'] > 0:
         cv2.circle(frame,(int(data_gp['gp'][0]*width),int(data_gp['gp'][1]*height)), 60, (0,0,255), 6)
     # Display the resulting frame
     cv2.imshow('Tobii Pro Glasses 2 - Live Scene',frame)

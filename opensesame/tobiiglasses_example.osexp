@@ -1,6 +1,6 @@
 ---
 API: 2.1
-OpenSesame: 3.2.4
+OpenSesame: 3.2.8
 Platform: posix
 ---
 set width 1280
@@ -50,9 +50,9 @@ define inline_script calibration_code
 	res = tobiiglasses.wait_until_calibration_is_done(calibration_id)
 	
 	if res is False:
-		calibration = 0
+		var.calibration = 0
 	else:
-		calibration = 1
+		var.calibration = 1
 	__end__
 	set _prepare ""
 
@@ -74,7 +74,7 @@ define sketchpad calibration_succeded
 define inline_script config
 	set description "Executes Python code"
 	___run__
-	calibration_res = None
+	var.calibration = 0
 	__end__
 	set _prepare ""
 
@@ -88,11 +88,11 @@ define sequence experiment
 	run calibration always
 	run calibration_process always
 	run calibration_code always
-	run calibration_failed "calibration = 1"
-	run calibration_succeded "calibration = 0"
-	run start_recording always
-	run recording always
-	run stop_recording always
+	run calibration_failed "[calibration] = 0"
+	run calibration_succeded "[calibration] = 1"
+	run start_recording "[calibration] = 1"
+	run recording "[calibration] = 1"
+	run stop_recording "[calibration] = 1"
 
 define notepad getting_started
 	__note__
@@ -112,6 +112,7 @@ define sketchpad recording
 	set duration keypress
 	set description "Displays stimuli"
 	draw textline center=1 color=white font_bold=no font_family=mono font_italic=no font_size=18 html=yes show_if=always text="Recording in progress..." x=-32 y=0 z_index=0
+	draw textline center=1 color=white font_bold=no font_family=mono font_italic=no font_size=18 html=yes show_if=always text="Press a key to stop the recording" x=-32.0 y=64.0 z_index=0
 
 define inline_script start_recording
 	set description "Executes Python code"
